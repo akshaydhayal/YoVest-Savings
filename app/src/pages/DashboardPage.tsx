@@ -21,17 +21,20 @@ export default function DashboardPage() {
   const { positions, isLoading: posLoading } = useUserPositions(address)
   const { vaults } = useVaults()
 
-  const getVaultConfig = (addr: string) =>
-    vaults?.find((v: any) => v.contracts.vaultAddress.toLowerCase() === addr.toLowerCase())
+  const getVaultConfig = (addr: any) => {
+    const searchAddr = (addr?.address || addr)?.toString().toLowerCase()
+    return vaults?.find((v: any) => v.contracts.vaultAddress.toLowerCase() === searchAddr)
+  }
 
-  const getVaultId = (addr: string) =>
-    Object.entries(VAULTS).find(([, v]) => v.address.toLowerCase() === addr.toLowerCase())?.[0]
+  const getVaultId = (addr: any) => {
+    const searchAddr = (addr?.address || addr)?.toString().toLowerCase()
+    return Object.entries(VAULTS).find(([, v]) => v.address.toLowerCase() === searchAddr)?.[0]
+  }
 
   const activePositions = positions?.filter((p) => p.position.shares > 0n) ?? []
 
   const totalAssetsUsd = activePositions.reduce((acc, p: any) => {
-    const vaultAddr = p.vault?.address || p.vault; // handle both possible structures
-    const config = getVaultConfig(vaultAddr as string)
+    const config = getVaultConfig(p.vault)
     const assets = Number(formatTokenAmount(p.position.assets, (config as any)?.asset?.decimals ?? 6))
     return acc + assets
   }, 0)
@@ -91,8 +94,8 @@ export default function DashboardPage() {
         ) : (
           <div className="space-y-3">
             {activePositions.map(({ vault, position }: any, i) => {
-              const config = getVaultConfig(vault.address)
-              const vaultId = getVaultId(vault.address) ?? ''
+              const config = getVaultConfig(vault)
+              const vaultId = getVaultId(vault) ?? ''
               const accent = VAULT_COLORS[vaultId] ?? '#D6FF34'
               const assets = formatTokenAmount(position.assets, config?.underlying?.decimals ?? 6)
 

@@ -15,7 +15,10 @@ export default function VaultsPage() {
   const { positions } = useUserPositions(address)
 
   const getPosition = (vaultAddress: string) =>
-    positions?.find((p: any) => (p.vault?.address || p.vault)?.toLowerCase() === vaultAddress?.toLowerCase())
+    positions?.find((p: any) => {
+      const addr = p.vault?.address || p.vault;
+      return typeof addr === 'string' && addr.toLowerCase() === vaultAddress?.toLowerCase();
+    })
 
   return (
     <div className="space-y-10">
