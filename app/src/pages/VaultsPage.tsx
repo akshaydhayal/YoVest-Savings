@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { useVaults, useUserPositions } from '@yo-protocol/react'
 import { useAccount } from 'wagmi'
-import { TrendingUp, ArrowUpRight } from 'lucide-react'
+import { TrendingUp, Zap } from 'lucide-react'
 import VaultCard from '../components/VaultCard'
 import HeroStats from '../components/HeroStats'
 
@@ -23,39 +23,54 @@ export default function VaultsPage() {
 
   return (
     <div className="space-y-6">
-      {/* Hero */}
+      {/* Hero - Centered & Professional Scale */}
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="text-center space-y-8 pt-10 pb-16"
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        className="text-center space-y-8 mb-24 relative px-4 pt-4"
       >
-        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-2xl glass border-yo-neon/20 shadow-[0_0_20px_rgba(214,255,52,0.05)]">
-          <span className="w-2 h-2 rounded-full bg-yo-neon shadow-[0_0_10px_#D6FF34]" />
-          <span className="text-sm font-bold text-yo-neon tracking-tight uppercase">Live on Base Mainnet</span>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-yo-neon/5 blur-[120px] -z-10 rounded-full" />
+        
+        <div className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-white/[0.03] border border-white/[0.05] backdrop-blur-md">
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-yo-neon animate-pulse" />
+            <span className="text-[10px] font-bold text-yo-neon tracking-[0.2em] uppercase">Built on Base</span>
+          </div>
+          <div className="w-px h-3 bg-white/10 mx-1" />
+          <span className="text-[10px] font-bold text-yo-muted tracking-widest uppercase">Institutional Grade</span>
         </div>
         
-        <div className="space-y-4 max-w-4xl mx-auto">
-          <h1 className="text-6xl sm:text-7xl font-extrabold text-white tracking-tight leading-[1.05]">
-            Secure <span className="text-neon inline-block mb-1">Yield</span> for the <br /> 
-            <span className="text-gradient">Modern Investor.</span>
+        <div className="max-w-3xl mx-auto space-y-6">
+          <h1 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.1]">
+            Professional <span className="text-neon">Yield</span> for <br />
+            <span className="text-gradient">Modern Capital.</span>
           </h1>
-          <p className="text-yo-muted text-xl sm:text-2xl font-medium max-w-2xl mx-auto leading-relaxed">
-            Automated, non-custodial savings built on proven, institutional-grade infrastructure.
+          <p className="text-yo-muted text-base max-w-xl mx-auto leading-relaxed font-medium opacity-80">
+            Non-custodial savings architecture built for stability, transparency, and superior capital efficiency.
           </p>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-8 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-700">
+          <div className="flex items-center gap-2">
+            <TrendingUp size={16} />
+            <span className="text-[10px] font-bold uppercase tracking-widest">Base Mainnet</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Zap size={16} />
+            <span className="text-[10px] font-bold uppercase tracking-widest">YO Protocol</span>
+          </div>
         </div>
       </motion.div>
 
       <HeroStats />
 
-      <section>
-        <div className="flex items-end justify-between mb-10">
-          <div className="space-y-1">
-            <h2 className="text-3xl font-bold text-white tracking-tight">Investment Vaults</h2>
-            <p className="text-yo-muted font-medium">Earn real-time yield on your favorite assets.</p>
-          </div>
-          <div className="hidden md:flex items-center gap-2 text-xs font-bold text-yo-muted uppercase tracking-widest">
-            <TrendingUp size={14} className="text-yo-neon" />
+      <section className="mt-12 mb-20">
+        <div className="flex flex-col items-center text-center mb-10">
+          <h2 className="text-2xl font-black text-white tracking-tight">Investment Vaults</h2>
+          <p className="text-yo-muted text-sm font-medium mt-1">Earn real-time yield on your favorite assets.</p>
+          <div className="flex items-center gap-2 text-[10px] font-black text-yo-neon uppercase tracking-widest mt-4 px-3 py-1 rounded-full bg-yo-neon/5 border border-yo-neon/10">
+            <TrendingUp size={12} />
             Live APY Tracking
           </div>
         </div>

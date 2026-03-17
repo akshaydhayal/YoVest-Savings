@@ -20,28 +20,28 @@ export default function HeroStats() {
   ]
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-20">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
       {items.map(({ label, value, icon: Icon, color }, i) => (
         <motion.div
           key={label}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 + i * 0.1 }}
-          className="glass glass-hover rounded-[32px] p-8 relative overflow-hidden group"
+          className="glass glass-hover rounded-2xl p-5 relative overflow-hidden group border-white/5"
         >
           {/* Subtle Glow */}
           <div 
-            className="absolute -right-4 -top-4 w-24 h-24 rounded-full blur-3xl opacity-10 transition-opacity group-hover:opacity-20"
+            className="absolute -right-4 -top-4 w-16 h-16 rounded-full blur-3xl opacity-5 transition-opacity group-hover:opacity-10"
             style={{ background: color }}
           />
 
-          <div className="flex items-center gap-4 mb-4">
-            <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center p-2">
-              <Icon size={20} style={{ color }} />
+          <div className="flex items-center gap-2.5 mb-2.5">
+            <div className="w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center p-1.5">
+              <Icon size={14} style={{ color }} />
             </div>
-            <p className="text-[10px] font-bold text-yo-muted uppercase tracking-[0.2em]">{label}</p>
+            <p className="text-[8px] font-bold text-yo-muted uppercase tracking-[0.3em]">{label}</p>
           </div>
-          <p className="text-3xl font-extrabold text-white tracking-tight">{value}</p>
+          <p className="text-lg font-extrabold text-white tracking-tight">{value}</p>
         </motion.div>
       ))}
     </div>
