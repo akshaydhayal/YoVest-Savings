@@ -89,7 +89,7 @@ function StatPill({ label, value, accent }: { label: string; value: string; acce
       <span style={{ fontFamily:F_MONO, fontSize:18, fontWeight:500, color:accent ? '#d6ff34' : '#fff', letterSpacing:'-0.02em' }}>
         {value}
       </span>
-      <span style={{ fontFamily:F_SANS, fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.35)', textTransform:'uppercase', letterSpacing:'0.18em' }}>
+      <span style={{ fontFamily:F_SANS, fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.7)', textTransform:'uppercase', letterSpacing:'0.18em' }}>
         {label}
       </span>
     </div>
@@ -99,7 +99,7 @@ function StatPill({ label, value, accent }: { label: string; value: string; acce
 // ─── Field label ─────────────────────────────────────────────────────────────
 function FL({ children }: { children: React.ReactNode }) {
   return (
-    <p style={{ fontFamily:F_SANS, fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.35)', textTransform:'uppercase', letterSpacing:'0.22em', margin:'0 0 9px 1px' }}>
+    <p style={{ fontFamily:F_SANS, fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.7)', textTransform:'uppercase', letterSpacing:'0.22em', margin:'0 0 9px 1px' }}>
       {children}
     </p>
   )
@@ -151,7 +151,7 @@ export default function SIPPage() {
           <h1 style={{ fontFamily:F_SANS, fontSize:34, fontWeight:700, color:'#fff', margin:'0 0 10px', letterSpacing:'-0.025em', lineHeight:1.1 }}>
             Automate Your<br /><span style={{ color:'#d6ff34' }}>DeFi Savings</span>
           </h1>
-          <p style={{ color:'rgba(255,255,255,0.4)', fontSize:14, fontWeight:400, lineHeight:1.65 }}>
+          <p style={{ color:'rgba(255,255,255,0.7)', fontSize:14, fontWeight:400, lineHeight:1.65 }}>
             Schedule recurring deposits into high-yield YO vaults.
           </p>
         </div>
@@ -165,7 +165,7 @@ export default function SIPPage() {
     <div style={{ minHeight:'100vh', background:'#05070A', fontFamily:F_SANS, position:'relative', overflowX:'hidden' }}>
       <SceneBg />
 
-      <div style={{ maxWidth:660, margin:'0 auto', padding:'58px 24px 96px', position:'relative', zIndex:1 }}>
+      <div style={{ maxWidth:660, margin:'0 auto', padding:'24px 24px 48px', position:'relative', zIndex:1 }}>
 
         {/* Header */}
         <motion.div
@@ -188,7 +188,7 @@ export default function SIPPage() {
           }}>
             Recurring SIP
           </h1>
-          <p style={{ color:'rgba(255,255,255,0.38)', fontSize:13, fontWeight:400, marginTop:9, letterSpacing:'0.01em' }}>
+          <p style={{ color:'rgba(255,255,255,0.7)', fontSize:13, fontWeight:400, marginTop:9, letterSpacing:'0.01em' }}>
             Scheduled. Consistent. Compounding.
           </p>
         </motion.div>
@@ -246,7 +246,7 @@ export default function SIPPage() {
                 >
                   {Object.keys(VAULTS).map(id => <option key={id} value={id}>{id}</option>)}
                 </select>
-                <ChevronDown size={13} color="rgba(255,255,255,0.35)"
+                <ChevronDown size={13} color="rgba(255,255,255,0.7)"
                   style={{ position:'absolute', right:12, top:'50%', transform:'translateY(-50%)', pointerEvents:'none' }} />
               </div>
             </div>
@@ -264,7 +264,7 @@ export default function SIPPage() {
                       fontSize:11, fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase',
                       fontFamily:F_SANS, transition:'all 0.18s',
                       background: form.period === p ? '#d6ff34' : 'transparent',
-                      color:       form.period === p ? '#05070A'  : 'rgba(255,255,255,0.38)',
+                      color:       form.period === p ? '#05070A'  : 'rgba(255,255,255,0.7)',
                       boxShadow:   form.period === p ? '0 2px 10px rgba(214,255,52,0.22)' : 'none',
                     }}
                   >
@@ -331,7 +331,7 @@ export default function SIPPage() {
         </motion.div>
 
         {/* Hint */}
-        <p style={{ textAlign:'center', fontSize:11, color:'rgba(255,255,255,0.2)', fontWeight:400, marginBottom:40, letterSpacing:'0.02em' }}>
+        <p style={{ textAlign:'center', fontSize:11, color:'rgba(255,255,255,0.7)', fontWeight:400, marginBottom:24, letterSpacing:'0.02em' }}>
           Plans execute manually — come back when the timer shows "Ready now"
         </p>
 
@@ -340,10 +340,10 @@ export default function SIPPage() {
           {goals.length > 0 && (
             <motion.div key="list" initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }}>
               <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14, padding:'0 2px' }}>
-                <span style={{ fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.28)', textTransform:'uppercase', letterSpacing:'0.26em' }}>
+                <span style={{ fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.7)', textTransform:'uppercase', letterSpacing:'0.26em' }}>
                   Active Strategies
                 </span>
-                <span style={{ fontFamily:F_MONO, fontSize:10, color:'rgba(255,255,255,0.2)' }}>
+                <span style={{ fontFamily:F_MONO, fontSize:10, color:'rgba(255,255,255,0.7)' }}>
                   {goals.length} plan{goals.length > 1 ? 's' : ''}
                 </span>
               </div>
@@ -382,8 +382,8 @@ export default function SIPPage() {
                 <Calendar size={20} color="rgba(255,255,255,0.22)" />
               </div>
               <div>
-                <p style={{ color:'rgba(255,255,255,0.5)', fontSize:14, fontWeight:600, margin:0 }}>No active savings plans</p>
-                <p style={{ color:'rgba(255,255,255,0.22)', fontSize:12, fontWeight:400, marginTop:5 }}>Initialize your first SIP above to start compounding.</p>
+                <p style={{ color:'rgba(255,255,255,0.7)', fontSize:14, fontWeight:600, margin:0 }}>No active savings plans</p>
+                <p style={{ color:'rgba(255,255,255,0.7)', fontSize:12, fontWeight:400, marginTop:5 }}>Initialize your first SIP above to start compounding.</p>
               </div>
             </motion.div>
           )}
@@ -453,7 +453,7 @@ function GoalRow({
           display:'flex', alignItems:'center', justifyContent:'center',
           boxShadow: due ? '0 0 14px rgba(214,255,52,0.1)' : 'none',
         }}>
-          <Target size={18} color={due ? '#d6ff34' : 'rgba(255,255,255,0.3)'} />
+          <Target size={18} color={due ? '#d6ff34' : 'rgba(255,255,255,0.7)'} />
         </div>
         <div style={{ minWidth:0 }}>
           <div style={{ display:'flex', alignItems:'baseline', gap:5, flexWrap:'wrap' }}>
@@ -461,17 +461,17 @@ function GoalRow({
               ${parseFloat(goal.amount).toFixed(2)}
             </span>
             {symbol && (
-              <span style={{ fontFamily:F_SANS, fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.3)', textTransform:'uppercase', letterSpacing:'0.1em' }}>
+              <span style={{ fontFamily:F_SANS, fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.7)', textTransform:'uppercase', letterSpacing:'0.1em' }}>
                 {symbol}
               </span>
             )}
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:6, marginTop:4 }}>
-            <span style={{ fontFamily:F_SANS, fontSize:11, fontWeight:500, color:'rgba(255,255,255,0.3)' }}>
+            <span style={{ fontFamily:F_SANS, fontSize:11, fontWeight:500, color:'rgba(255,255,255,0.7)' }}>
               {goal.period} · {goal.vaultId}
             </span>
             <span style={{ width:3, height:3, borderRadius:'50%', background:'rgba(255,255,255,0.15)', display:'inline-block', flexShrink:0 }} />
-            <span style={{ fontFamily:F_MONO, fontSize:11, color: due ? '#d6ff34' : 'rgba(255,255,255,0.26)' }}>
+            <span style={{ fontFamily:F_MONO, fontSize:11, color: due ? '#d6ff34' : 'rgba(255,255,255,0.7)' }}>
               {timer}
             </span>
           </div>
@@ -507,8 +507,8 @@ function GoalRow({
           </button>
         ) : (
           <div style={{ display:'flex', alignItems:'center', gap:5, padding:'6px 12px', borderRadius:9, background:'rgba(255,255,255,0.03)', border:'1px solid rgba(255,255,255,0.07)' }}>
-            <CheckCircle2 size={11} color="rgba(255,255,255,0.22)" />
-            <span style={{ fontFamily:F_SANS, fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.25)', textTransform:'uppercase', letterSpacing:'0.12em', whiteSpace:'nowrap' }}>
+            <CheckCircle2 size={11} color="rgba(255,255,255,0.7)" />
+            <span style={{ fontFamily:F_SANS, fontSize:10, fontWeight:600, color:'rgba(255,255,255,0.7)', textTransform:'uppercase', letterSpacing:'0.12em', whiteSpace:'nowrap' }}>
               Scheduled
             </span>
           </div>

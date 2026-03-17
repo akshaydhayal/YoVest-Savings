@@ -2,8 +2,8 @@ import { getDefaultConfig } from '@rainbow-me/rainbowkit'
 import { base } from 'wagmi/chains'
 
 export const wagmiConfig = getDefaultConfig({
-  appName: 'YO Savings',
-  projectId: 'yo-savings-hackathon', // Replace with your WalletConnect project ID
+  appName: 'YoEarn',
+  projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID || 'yo_default', // Add your own in production
   chains: [base],
   ssr: false,
 })

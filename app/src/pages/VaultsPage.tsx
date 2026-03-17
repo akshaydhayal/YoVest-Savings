@@ -17,11 +17,15 @@ export default function VaultsPage() {
   const { vaults, isLoading }  = useVaults()
   const { positions }          = useUserPositions(address)
 
-  const getPosition = (vaultAddress: string) =>
-    positions?.find((p: any) => {
+  const getPosition = (vaultAddress: string) => {
+    if (!positions) return undefined;
+    const matches = positions.filter((p: any) => {
       const addr = p.vault?.address || p.vault
       return typeof addr === 'string' && addr.toLowerCase() === vaultAddress?.toLowerCase()
-    })
+    });
+    // Fall back to the first match if none have > 0 shares
+    return matches.find((m: any) => m.position && m.position.shares > 0n) || matches[0];
+  }
 
   return (
     <div style={{ fontFamily: F }}>
@@ -31,19 +35,19 @@ export default function VaultsPage() {
         initial={{ opacity: 0, y: 18 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        style={{ textAlign: 'center', padding: '48px 16px 40px', position: 'relative', marginBottom: 8 }}
+        style={{ textAlign: 'center', padding: '24px 16px 24px', position: 'relative', marginBottom: 0 }}
       >
         {/* Ambient glow behind title */}
         <div aria-hidden style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%, -50%)', width: 500, height: 200, borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(214,255,52,0.06) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
         {/* Badge */}
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '5px 14px', borderRadius: 100, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', marginBottom: 22 }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '5px 14px', borderRadius: 100, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)', marginBottom: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#d6ff34', display: 'inline-block', boxShadow: '0 0 6px rgba(214,255,52,0.8)' }} />
             <span style={{ fontSize: 10, fontWeight: 600, color: '#d6ff34', letterSpacing: '0.18em', textTransform: 'uppercase' }}>Built on Base</span>
           </div>
           <div style={{ width: 1, height: 12, background: 'rgba(255,255,255,0.1)' }} />
-          <span style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.5)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Institutional Grade</span>
+          <span style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.8)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>Institutional Grade</span>
         </div>
 
         {/* Title */}
@@ -57,14 +61,14 @@ export default function VaultsPage() {
           </span>
         </h1>
 
-        <p style={{ color: 'rgba(148,163,184,0.65)', fontSize: 15, fontWeight: 400, maxWidth: 440, margin: '0 auto 28px', lineHeight: 1.65 }}>
+        <p style={{ color: 'rgba(148,163,184,0.8)', fontSize: 15, fontWeight: 400, maxWidth: 440, margin: '0 auto 16px', lineHeight: 1.65 }}>
           Non-custodial savings architecture built for stability, transparency, and superior capital efficiency.
         </p>
 
         {/* Trust strip */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 28, opacity: 0.4, transition: 'opacity 0.3s' }}
-          onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.opacity = '0.85'}
-          onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.opacity = '0.4'}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 28, opacity: 0.7, transition: 'opacity 0.3s' }}
+          onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.opacity = '1'}
+          onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.opacity = '0.7'}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <TrendingUp size={14} color="rgba(255,255,255,0.7)" />
             <span style={{ fontSize: 10, fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.15em' }}>Base Mainnet</span>
@@ -80,12 +84,12 @@ export default function VaultsPage() {
       <HeroStats />
 
       {/* ── Vault grid ── */}
-      <section style={{ marginBottom: 48 }}>
-        <div style={{ textAlign: 'center', marginBottom: 32 }}>
+      <section style={{ marginBottom: 24 }}>
+        <div style={{ textAlign: 'center', marginBottom: 20 }}>
           <h2 style={{ fontFamily: F, fontSize: 22, fontWeight: 700, color: '#fff', letterSpacing: '-0.02em', margin: '0 0 6px' }}>
             Investment Vaults
           </h2>
-          <p style={{ color: 'rgba(148,163,184,0.55)', fontSize: 13, fontWeight: 400, margin: '0 0 14px' }}>
+          <p style={{ color: 'rgba(148,163,184,0.8)', fontSize: 13, fontWeight: 400, margin: '0 0 14px' }}>
             Earn real-time yield on your favourite assets.
           </p>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 12px', borderRadius: 100, background: 'rgba(214,255,52,0.06)', border: '1px solid rgba(214,255,52,0.12)' }}>

@@ -1,8 +1,9 @@
-import { ReactNode, useState } from 'react'
+import type { ReactNode } from 'react'
+import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { motion, AnimatePresence } from 'framer-motion'
-import { TrendingUp, LayoutDashboard, Target, Zap, Menu, X } from 'lucide-react'
+import { LayoutDashboard, Target, Zap, Menu, X } from 'lucide-react'
 
 const NAV = [
   { href: '/', label: 'Vaults', icon: Zap },
@@ -31,10 +32,10 @@ export default function Layout({ children }: { children: ReactNode }) {
 
           {/* Logo */}
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-            <div style={{ width: 32, height: 32, borderRadius: 10, background: '#d6ff34', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <TrendingUp size={16} color="#05070A" />
+            <div style={{ width: 32, height: 32, borderRadius: 10, background: '#d6ff34', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 16px rgba(214,255,52,0.2)' }}>
+              <Zap size={18} color="#05070A" />
             </div>
-            <span style={{ fontSize: 16, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>YO Savings</span>
+            <span style={{ fontSize: 16, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em' }}>YoEarn</span>
           </Link>
 
           {/* Desktop nav */}
@@ -124,19 +125,19 @@ export default function Layout({ children }: { children: ReactNode }) {
       </header>
 
       {/* ── Page ── */}
-      <main style={{ flex: 1, maxWidth: 1200, width: '100%', margin: '0 auto', padding: '28px 24px 60px' }}>
+      <main style={{ flex: 1, maxWidth: 1200, width: '100%', margin: '0 auto', padding: '16px 24px 32px' }}>
         {children}
       </main>
 
       {/* ── Footer ── */}
       <footer style={{ borderTop: '1px solid rgba(255,255,255,0.05)', padding: '20px 24px', textAlign: 'center' }}>
-        <span style={{ fontSize: 12, color: 'rgba(148,163,184,0.4)', fontFamily: F }}>
+        <span style={{ fontSize: 12, color: 'rgba(148,163,184,0.7)', fontFamily: F }}>
           Built with{' '}
           <a href="https://yo.xyz" target="_blank" rel="noopener noreferrer"
             style={{ color: '#d6ff34', textDecoration: 'none', fontWeight: 500 }}>
             YO Protocol
           </a>
-          {' '}· Savings on Base
+          {' '}· Yield on Base
         </span>
       </footer>
 

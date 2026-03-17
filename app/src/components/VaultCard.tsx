@@ -43,6 +43,8 @@ export default function VaultCard({ vault, position }: { vault: any; position?: 
     (vault.asset?.decimals || vault.underlying?.decimals) ?? 6
   )
 
+  const isGold = vaultId === 'yoGOLD'
+
   return (
     <>
       <motion.div
@@ -60,8 +62,8 @@ export default function VaultCard({ vault, position }: { vault: any; position?: 
           cursor: 'default',
           transition: 'border-color 0.3s',
         }}
-        onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = hasPosition ? `${accentColor}35` : 'rgba(255,255,255,0.14)' }}
-        onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = hasPosition ? `${accentColor}20` : 'rgba(255,255,255,0.07)' }}
+        onMouseEnter={e => { if (!isGold) (e.currentTarget as HTMLDivElement).style.borderColor = hasPosition ? `${accentColor}35` : 'rgba(255,255,255,0.14)' }}
+        onMouseLeave={e => { if (!isGold) (e.currentTarget as HTMLDivElement).style.borderColor = hasPosition ? `${accentColor}20` : 'rgba(255,255,255,0.07)' }}
       >
         {/* Accent glow */}
         <div aria-hidden style={{ position: 'absolute', top: -40, right: -40, width: 140, height: 140, borderRadius: '50%', background: `radial-gradient(circle, ${accentColor}15 0%, transparent 70%)`, pointerEvents: 'none', transition: 'opacity 0.3s' }} />
@@ -84,7 +86,7 @@ export default function VaultCard({ vault, position }: { vault: any; position?: 
               <h3 style={{ fontFamily: F, fontSize: 15, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em', margin: '0 0 3px' }}>
                 {vault.name ?? vaultId}
               </h3>
-              <p style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: 'rgba(148,163,184,0.5)', textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0 }}>
+              <p style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: 'rgba(148,163,184,0.8)', textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0 }}>
                 {assetSymbol} · Base
               </p>
             </div>
@@ -94,19 +96,19 @@ export default function VaultCard({ vault, position }: { vault: any; position?: 
           <div style={{
             padding: '4px 10px', borderRadius: 100,
             fontSize: 9, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.12em',
-            background: hasPosition ? `${accentColor}10` : 'rgba(255,255,255,0.04)',
-            border: `1px solid ${hasPosition ? `${accentColor}25` : 'rgba(255,255,255,0.08)'}`,
-            color: hasPosition ? accentColor : 'rgba(148,163,184,0.4)',
+            background: isGold ? 'rgba(255,255,255,0.03)' : hasPosition ? `${accentColor}10` : 'rgba(255,255,255,0.04)',
+            border: `1px solid ${isGold ? 'rgba(255,255,255,0.06)' : hasPosition ? `${accentColor}25` : 'rgba(255,255,255,0.08)'}`,
+            color: isGold ? 'rgba(148,163,184,0.4)' : hasPosition ? accentColor : 'rgba(148,163,184,0.7)',
             flexShrink: 0,
           }}>
-            {hasPosition ? 'Active' : 'Available'}
+            {isGold ? 'Coming Soon' : hasPosition ? 'Active' : 'Available'}
           </div>
         </div>
 
         {/* ── Metrics row ── */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 0, borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
           <div style={{ padding: '12px 14px', background: 'rgba(255,255,255,0.02)' }}>
-            <p style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.45)', textTransform: 'uppercase', letterSpacing: '0.2em', margin: '0 0 6px' }}>
+            <p style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.7)', textTransform: 'uppercase', letterSpacing: '0.2em', margin: '0 0 6px' }}>
               Est. Growth
             </p>
             <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
@@ -115,7 +117,7 @@ export default function VaultCard({ vault, position }: { vault: any; position?: 
             </div>
           </div>
           <div style={{ padding: '12px 14px', borderLeft: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)' }}>
-            <p style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.45)', textTransform: 'uppercase', letterSpacing: '0.2em', margin: '0 0 6px' }}>
+            <p style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.7)', textTransform: 'uppercase', letterSpacing: '0.2em', margin: '0 0 6px' }}>
               TVL Locked
             </p>
             <p style={{ fontFamily: FNUM, fontSize: 14, fontWeight: 500, color: '#fff', letterSpacing: '-0.01em', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -134,15 +136,15 @@ export default function VaultCard({ vault, position }: { vault: any; position?: 
           transition: 'opacity 0.3s',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
-            <p style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.45)', textTransform: 'uppercase', letterSpacing: '0.2em', margin: 0 }}>
+            <p style={{ fontSize: 9, fontWeight: 600, color: 'rgba(243, 245, 248, 1)', textTransform: 'uppercase', letterSpacing: '0.2em', margin: 0 }}>
               Portfolio Balance
             </p>
             {hasPosition && <Zap size={10} color={accentColor} />}
-            {!hasPosition && <Wallet size={10} color="rgba(148,163,184,0.3)" />}
+            {!hasPosition && <Wallet size={10} color="rgba(148,163,184,0.5)" />}
           </div>
           <p style={{ fontFamily: FNUM, fontSize: 16, fontWeight: 500, color: '#fff', letterSpacing: '-0.01em', margin: 0 }}>
             {balance}{' '}
-            <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.45)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
               {assetSymbol}
             </span>
           </p>
@@ -154,22 +156,25 @@ export default function VaultCard({ vault, position }: { vault: any; position?: 
         {/* ── CTA ── */}
         <button
           onClick={() => setModalOpen(true)}
-          disabled={!address}
+          disabled={!address || isGold}
           style={{
             width: '100%', height: 44, borderRadius: 12,
-            border: 'none', cursor: address ? 'pointer' : 'not-allowed',
-            background: '#d6ff34', color: '#05070A',
+            border: 'none', cursor: (!address || isGold) ? 'not-allowed' : 'pointer',
+            background: isGold ? 'rgba(255,255,255,0.05)' : '#d6ff34', 
+            color: isGold ? 'rgba(255,255,255,0.3)' : '#05070A',
             fontFamily: F, fontSize: 12, fontWeight: 700,
             letterSpacing: '0.1em', textTransform: 'uppercase',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             transition: 'all 0.22s',
-            boxShadow: '0 0 20px rgba(214,255,52,0.14)',
-            opacity: address ? 1 : 0.35,
+            boxShadow: isGold ? 'none' : '0 0 20px rgba(214,255,52,0.14)',
+            opacity: address || isGold ? 1 : 0.35,
           }}
-          onMouseEnter={e => { if (address) (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 32px rgba(214,255,52,0.32)' }}
-          onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(214,255,52,0.14)' }}
+          onMouseEnter={e => { if (address && !isGold) (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 32px rgba(214,255,52,0.32)' }}
+          onMouseLeave={e => { if (address && !isGold) (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 0 20px rgba(214,255,52,0.14)' }}
         >
-          {address ? (
+          {isGold ? (
+            'Not Supported on Base'
+          ) : address ? (
             <><span>Enter Vault</span><ArrowUpRight size={14} /></>
           ) : (
             'Connect Wallet'

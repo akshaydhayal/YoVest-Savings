@@ -42,7 +42,7 @@ export default function DashboardPage() {
 
   // ── Not connected ─────────────────────────────────────────────────────────
   if (!isConnected) return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 24px', gap: 24, fontFamily: F }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '40px 24px', gap: 24, fontFamily: F }}>
       <div style={{ position: 'relative' }}>
         <div style={{ position: 'absolute', inset: -10, borderRadius: '50%', border: '1px solid rgba(214,255,52,0.15)', animation: 'dashRing 2.8s ease-in-out infinite' }} />
         <div style={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(214,255,52,0.07)', border: '1px solid rgba(214,255,52,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -51,7 +51,7 @@ export default function DashboardPage() {
       </div>
       <div style={{ textAlign: 'center' }}>
         <h2 style={{ fontFamily: F, fontSize: 24, fontWeight: 700, color: '#fff', margin: '0 0 8px', letterSpacing: '-0.02em' }}>Connect your wallet</h2>
-        <p style={{ color: 'rgba(148,163,184,0.55)', fontSize: 14, fontWeight: 400, maxWidth: 300, lineHeight: 1.6, margin: 0 }}>
+        <p style={{ color: 'rgba(148,163,184,0.8)', fontSize: 14, fontWeight: 400, maxWidth: 300, lineHeight: 1.6, margin: 0 }}>
           See your savings portfolio, P&L, and transaction history across all YO vaults.
         </p>
       </div>
@@ -62,10 +62,10 @@ export default function DashboardPage() {
 
   // ── Connected ─────────────────────────────────────────────────────────────
   return (
-    <div style={{ fontFamily: F, paddingTop: 12 }}>
+    <div style={{ fontFamily: F }}>
 
       {/* ── Page header ── */}
-      <header style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, marginBottom: 32, padding: '0 2px' }}>
+      <header style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, marginBottom: 20, padding: '0 2px' }}>
         <div>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, padding: '4px 12px', borderRadius: 100, background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.18)', marginBottom: 10 }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', display: 'inline-block' }} />
@@ -76,9 +76,9 @@ export default function DashboardPage() {
           </h1>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <button style={{ height: 38, padding: '0 16px', borderRadius: 11, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', fontFamily: F, fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.18s' }}
+          <button style={{ height: 38, padding: '0 16px', borderRadius: 11, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', fontFamily: F, fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', transition: 'all 0.18s' }}
             onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.08)'; (e.currentTarget as HTMLButtonElement).style.color = '#fff' }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)'; (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.7)' }}>
+            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.04)'; (e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.9)' }}>
             Export History
           </button>
           <Link to="/sip" style={{ height: 38, padding: '0 16px', borderRadius: 11, background: '#d6ff34', color: '#05070A', fontFamily: F, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6, boxShadow: '0 0 20px rgba(214,255,52,0.16)', transition: 'box-shadow 0.2s' }}
@@ -91,7 +91,7 @@ export default function DashboardPage() {
       </header>
 
       {/* ── Metric cards ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 36 }} className="dash-metric-grid">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 24 }} className="dash-metric-grid">
         {/* Net value */}
         <motion.div
           initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
@@ -101,7 +101,7 @@ export default function DashboardPage() {
             <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <TrendingUp size={13} color="rgba(148,163,184,0.6)" />
             </div>
-            <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.45)', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Net Savings Value</span>
+            <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.7)', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Net Savings Value</span>
           </div>
           <p style={{ fontFamily: FNUM, fontSize: 28, fontWeight: 500, color: '#fff', letterSpacing: '-0.025em', margin: '0 0 6px' }}>
             ${totalAssetsUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -119,12 +119,12 @@ export default function DashboardPage() {
             <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Zap size={13} color="rgba(148,163,184,0.6)" />
             </div>
-            <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.45)', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Active Capital</span>
+            <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.7)', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Active Capital</span>
           </div>
           <p style={{ fontFamily: FNUM, fontSize: 28, fontWeight: 500, color: '#fff', letterSpacing: '-0.02em', margin: '0 0 6px' }}>
             {activePositions.length}
           </p>
-          <p style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.4)', textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>
+          <p style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.7)', textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>
             Positions Active
           </p>
         </motion.div>
@@ -137,12 +137,12 @@ export default function DashboardPage() {
             <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <BarChart3 size={13} color="rgba(148,163,184,0.6)" />
             </div>
-            <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.45)', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Total Earned</span>
+            <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.7)', textTransform: 'uppercase', letterSpacing: '0.2em' }}>Total Earned</span>
           </div>
           <p style={{ fontFamily: FNUM, fontSize: 28, fontWeight: 500, color: '#10b981', letterSpacing: '-0.02em', margin: '0 0 6px' }}>
             $0.00
           </p>
-          <p style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.4)', textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>
+          <p style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.7)', textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>
             Real-time Accrual
           </p>
         </motion.div>
@@ -153,7 +153,7 @@ export default function DashboardPage() {
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: 20 }}>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 11px', borderRadius: 100, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)', marginBottom: 8 }}>
             <Zap size={10} color="#d6ff34" />
-            <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.5)', textTransform: 'uppercase', letterSpacing: '0.18em' }}>Active Positions</span>
+            <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.8)', textTransform: 'uppercase', letterSpacing: '0.18em' }}>Active Positions</span>
           </div>
           <h3 style={{ fontFamily: F, fontSize: 16, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em', margin: 0 }}>
             Allocated Assets
@@ -206,7 +206,7 @@ export default function DashboardPage() {
                         <p style={{ fontFamily: F, fontSize: 14, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em', margin: '0 0 3px' }}>
                           {(config as any)?.name || vaultId}
                         </p>
-                        <p style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: 'rgba(148,163,184,0.4)', textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>
+                        <p style={{ fontFamily: F, fontSize: 10, fontWeight: 500, color: 'rgba(148,163,184,0.7)', textTransform: 'uppercase', letterSpacing: '0.12em', margin: 0 }}>
                           Base Mainnet
                         </p>
                       </div>
@@ -216,7 +216,7 @@ export default function DashboardPage() {
                     <div style={{ textAlign: 'right' }}>
                       <p style={{ fontFamily: FNUM, fontSize: 14, fontWeight: 500, color: '#fff', letterSpacing: '-0.01em', margin: '0 0 5px' }}>
                         {formatTokenAmount(pos.position.assets, (config as any)?.asset?.decimals || 6)}{' '}
-                        <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.4)' }}>
+                        <span style={{ fontFamily: F, fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.7)' }}>
                           {(config as any)?.asset?.symbol}
                         </span>
                       </p>
