@@ -6,7 +6,7 @@ import {
   useVaults,
 } from '@yo-protocol/react'
 import { VAULTS, formatTokenAmount } from '@yo-protocol/core'
-import { ArrowUpRight, LayoutDashboard } from 'lucide-react'
+import { ArrowUpRight, LayoutDashboard, Zap } from 'lucide-react'
 
 const VAULT_COLORS: Record<string, string> = {
   yoUSD: '#00FF8B',
@@ -55,32 +55,31 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8">
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-white">My Savings</h1>
-        <p className="text-yo-muted text-sm mt-1">Your active positions on Base</p>
-      </motion.div>
+    <div className="space-y-12">
+      <div className="space-y-4">
+        <h1 className="text-4xl font-extrabold text-white tracking-tight">Portfolio</h1>
+        <p className="text-yo-muted font-medium">Your active savings positions on Base Mainnet.</p>
+      </div>
 
       {/* Total balance card */}
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-yo-card border border-yo-border rounded-2xl p-6 relative overflow-hidden"
-      >
-        <div className="absolute -right-8 -top-8 w-40 h-40 rounded-full bg-yo-neon/5 blur-2xl" />
-        <p className="text-xs text-yo-muted uppercase tracking-widest mb-2">Total Balance</p>
-        <p className="text-4xl font-bold text-white">
-          ${totalAssetsUsd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-        </p>
-        <p className="text-sm text-yo-neon mt-2">Across {activePositions.length} active vault{activePositions.length !== 1 ? 's' : ''}</p>
-      </motion.div>
+      <div className="glass rounded-[40px] p-10 relative overflow-hidden shadow-[0_32px_64px_rgba(0,0,0,0.5)]">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-yo-neon/10 blur-[100px] -mr-32 -mt-32" />
+        <div className="relative z-10 space-y-2">
+          <p className="text-[10px] font-bold text-yo-muted uppercase tracking-[0.3em]">Total Savings Value</p>
+          <h2 className="text-7xl font-extrabold text-white tracking-tighter">
+            <span className="text-yo-neon text-glow-neon">$</span>
+            {totalAssetsUsd.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+          </h2>
+          <div className="flex items-center gap-2 text-sm font-bold text-yo-neon uppercase tracking-widest mt-6">
+            <Zap size={14} className="animate-pulse" />
+            Across {activePositions.length} active {activePositions.length === 1 ? 'vault' : 'vaults'}
+          </div>
+        </div>
+      </div>
 
       {/* Positions */}
-      <section>
-        <h2 className="text-sm font-semibold text-yo-muted uppercase tracking-widest mb-4">
-          Active Positions
-        </h2>
+      <section className="space-y-6">
+        <h3 className="text-xl font-bold text-white tracking-tight px-2">Active Positions</h3>
         {posLoading ? (
           <div className="space-y-3">
             {[1, 2].map((i) => (
@@ -97,32 +96,35 @@ export default function DashboardPage() {
               const config = getVaultConfig(vault)
               const vaultId = getVaultId(vault) ?? ''
               const accent = VAULT_COLORS[vaultId] ?? '#D6FF34'
-              const assets = formatTokenAmount(position.assets, config?.underlying?.decimals ?? 6)
+              const assets = formatTokenAmount(position.assets, (config as any)?.underlying?.decimals ?? 6)
 
               return (
                 <motion.div
                   key={vault.address}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className="flex items-center justify-between bg-yo-card border border-yo-border rounded-2xl px-5 py-4 hover:border-yo-border/80 transition-colors"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                  className="glass glass-hover rounded-3xl p-6 flex items-center justify-between"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-yo-black border border-yo-border flex items-center justify-center">
-                      <LayoutDashboard size={18} style={{ color: accent }} />
+                  <div className="flex items-center gap-5">
+                    <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center relative shadow-inner overflow-hidden">
+                      <div className="absolute inset-0 opacity-10" style={{ background: accent }} />
+                      <LayoutDashboard size={24} style={{ color: accent }} />
                     </div>
                     <div>
-                      <p className="font-medium text-white text-sm">{(config as any)?.name ?? vaultId}</p>
-                      <p className="text-xs text-yo-muted">{(config as any)?.asset?.symbol}</p>
+                      <p className="text-lg font-bold text-white tracking-tight">{(config as any)?.name ?? vaultId}</p>
+                      <p className="text-xs font-bold text-yo-muted uppercase tracking-widest">{(config as any)?.asset?.symbol} · Base</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-white">
-                      {assets} {(config as any)?.asset?.symbol}
+                  <div className="text-right space-y-1">
+                    <p className="text-2xl font-extrabold text-white tracking-tight">
+                      {assets}{' '}
+                      <span className="text-sm font-bold text-yo-muted uppercase">{(config as any)?.asset?.symbol}</span>
                     </p>
-                    <p className="text-xs font-medium text-yo-neon">
+                    <div className="flex items-center justify-end gap-1.5 px-3 py-1 rounded-full bg-yo-neon/5 border border-yo-neon/20 text-[10px] font-bold text-yo-neon uppercase tracking-widest">
+                      <Zap size={10} />
                       Connected
-                    </p>
+                    </div>
                   </div>
                 </motion.div>
               )

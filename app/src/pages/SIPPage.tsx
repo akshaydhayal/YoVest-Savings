@@ -4,7 +4,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import { useVaults, useDeposit } from '@yo-protocol/react'
 import { VAULTS, parseTokenAmount } from '@yo-protocol/core'
-import { Target, Calendar, TrendingUp, CheckCircle2, Loader2 } from 'lucide-react'
+import { Target, Calendar, TrendingUp, CheckCircle2, Loader2, Zap } from 'lucide-react'
 
 const PERIODS = ['Daily', 'Weekly', 'Monthly'] as const
 type Period = (typeof PERIODS)[number]
@@ -31,7 +31,7 @@ function isDue(goal: SIPGoal): boolean {
 }
 
 export default function SIPPage() {
-  const { address, isConnected } = useAccount()
+  const { isConnected } = useAccount()
   const { vaults } = useVaults()
   const [goals, setGoals] = useState<SIPGoal[]>(loadGoals)
   const [form, setForm] = useState({ vaultId: 'yoUSD', amount: '', period: 'Weekly' as Period })
@@ -70,45 +70,52 @@ export default function SIPPage() {
   }
 
   return (
-    <div className="max-w-xl mx-auto space-y-8">
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-          <Calendar className="text-yo-neon" size={24} />
-          SIP Savings (One-Click)
+    <div className="max-w-2xl mx-auto space-y-12">
+      <div className="space-y-4">
+        <h1 className="text-4xl font-extrabold text-white tracking-tight flex items-center gap-3">
+          <Calendar className="text-yo-neon" size={32} />
+          Smart SIP
         </h1>
-        <p className="text-yo-muted text-sm mt-1">
-          Set goals and get notified when it's time to save.
+        <p className="text-yo-muted font-medium">
+          Automate your DeFi savings goals with one-click execution.
         </p>
-      </motion.div>
+      </div>
 
       <motion.section
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.1 }}
-        className="bg-yo-card border border-yo-border rounded-2xl p-6 space-y-6"
+        className="glass rounded-[40px] p-10 space-y-8 relative overflow-hidden shadow-[0_32px_64px_rgba(0,0,0,0.5)]"
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <label className="text-xs font-medium text-yo-muted">Vault</label>
-            <select
-              value={form.vaultId}
-              onChange={(e) => setForm((f) => ({ ...f, vaultId: e.target.value }))}
-              className="w-full bg-yo-black border border-yo-border rounded-xl px-4 py-2.5 text-white outline-none focus:border-yo-neon/50 transition-colors"
-            >
-              {Object.keys(VAULTS).map((id) => (
-                <option key={id} value={id}>{id}</option>
-              ))}
-            </select>
+        <div className="absolute top-0 right-0 w-48 h-48 bg-yo-neon/5 blur-[80px]" />
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div className="space-y-3">
+            <label className="text-[10px] font-bold text-yo-muted uppercase tracking-[0.2em] px-1">Select Vault</label>
+            <div className="relative">
+              <select
+                value={form.vaultId}
+                onChange={(e) => setForm((f) => ({ ...f, vaultId: e.target.value }))}
+                className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl px-5 text-white font-bold outline-none focus:border-yo-neon/50 transition-all appearance-none"
+              >
+                {Object.keys(VAULTS).map((id) => (
+                  <option key={id} value={id} className="bg-yo-dark">{id}</option>
+                ))}
+              </select>
+              <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-yo-muted">
+                <Target size={18} />
+              </div>
+            </div>
           </div>
-          <div className="space-y-2">
-            <label className="text-xs font-medium text-yo-muted">Frequency</label>
-            <div className="flex bg-yo-black border border-yo-border rounded-xl p-1">
+          <div className="space-y-3">
+            <label className="text-[10px] font-bold text-yo-muted uppercase tracking-[0.2em] px-1">Saving Frequency</label>
+            <div className="flex bg-white/5 border border-white/10 rounded-2xl p-1.5 h-14">
               {PERIODS.map((p) => (
                 <button
                   key={p}
                   onClick={() => setForm((f: any) => ({ ...f, period: p }))}
-                  className={`flex-1 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                    form.period === p ? 'bg-yo-neon text-black' : 'text-yo-muted hover:text-white'
+                  className={`flex-1 rounded-xl text-xs font-bold transition-all ${
+                    form.period === p ? 'bg-yo-neon text-black shadow-lg' : 'text-yo-muted hover:text-white'
                   }`}
                 >
                   {p}
@@ -118,28 +125,34 @@ export default function SIPPage() {
           </div>
         </div>
 
-        <div className="p-4 bg-yo-black rounded-xl border border-yo-border flex items-center gap-3">
-          <input
-            type="number"
-            placeholder="Amount to save..."
-            value={form.amount}
-            onChange={(e) => setForm((f: any) => ({ ...f, amount: e.target.value }))}
-            className="flex-1 bg-transparent text-white font-semibold outline-none"
-          />
-          <span className="text-yo-neon font-bold text-sm">USDC</span>
+        <div className="space-y-3">
+          <label className="text-[10px] font-bold text-yo-muted uppercase tracking-[0.2em] px-1">Saving Amount</label>
+          <div className="group relative">
+            <input
+              type="number"
+              placeholder="0.00"
+              value={form.amount}
+              onChange={(e) => setForm((f: any) => ({ ...f, amount: e.target.value }))}
+              className="w-full h-20 bg-white/5 border border-white/10 rounded-2xl px-6 text-3xl font-extrabold text-white outline-none focus:border-yo-neon/50 focus:bg-white/[0.08] transition-all"
+            />
+            <div className="absolute right-6 top-1/2 -translate-y-1/2 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/10 border border-white/5">
+              <span className="text-sm font-bold text-white">USDC</span>
+            </div>
+          </div>
         </div>
 
         <button
           onClick={addGoal}
-          className="w-full py-3.5 rounded-xl bg-yo-neon text-black font-bold hover:brightness-110 active:scale-95 transition-all"
+          className="w-full h-16 rounded-[24px] bg-yo-neon text-black font-extrabold text-lg transition-all duration-300 hover:shadow-[0_0_30px_rgba(214,255,52,0.3)] hover:scale-[1.01] active:scale-95 flex items-center justify-center gap-2"
         >
-          Create Savings Goal
+          Initialize Plan
+          <TrendingUp size={20} />
         </button>
       </motion.section>
 
       {goals.length > 0 && (
-        <section className="space-y-3">
-          <h2 className="text-sm font-semibold text-yo-muted uppercase tracking-widest">Your Goals</h2>
+      <section className="space-y-6 pt-4">
+        <h2 className="text-xl font-bold text-white tracking-tight px-1">Active Plans</h2>
           {goals.map((goal, i) => {
             const due = isDue(goal)
             const config = getVaultConfig(goal.vaultId)
@@ -149,7 +162,6 @@ export default function SIPPage() {
               <GoalRow
                 key={i}
                 goal={goal}
-                config={config}
                 vault={vault}
                 due={due}
                 onRemove={() => removeGoal(i)}
@@ -167,8 +179,8 @@ export default function SIPPage() {
       )}
 
       {goals.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-yo-border p-8 text-center">
-          <p className="text-yo-muted text-sm">No savings goals yet. Create one above.</p>
+        <div className="rounded-[32px] border border-dashed border-white/10 p-12 text-center glass">
+          <p className="text-yo-muted font-medium">No active savings plans. Initialize your first SIP above.</p>
         </div>
       )}
     </div>
@@ -177,14 +189,12 @@ export default function SIPPage() {
 
 function GoalRow({
   goal,
-  config,
   vault,
   due,
   onRemove,
   onExecuted,
 }: {
   goal: SIPGoal
-  config: any
   vault: any
   due: boolean
   onRemove: () => void
@@ -204,7 +214,6 @@ function GoalRow({
   const handleExecute = async () => {
     if (!vault || !address) return
     // Handle both VaultConfig and VaultStatsItem structures
-    const vaultAddr = vault.contracts?.vaultAddress || vault.address
     const tokenAddress = vault.asset?.address || (vault.underlying?.address ? (vault.underlying.address[8453] || vault.underlying.address[Object.keys(vault.underlying.address)[0]]) : undefined)
     const decimals = (vault.asset?.decimals || vault.underlying?.decimals) ?? 6
     
@@ -219,37 +228,48 @@ function GoalRow({
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      className={`flex items-center justify-between bg-yo-card border rounded-2xl px-5 py-4 transition-all ${
-        due ? 'border-yo-neon/40 shadow-[0_0_20px_rgba(214,255,52,0.06)]' : 'border-yo-border'
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className={`relative glass rounded-[32px] p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 overflow-hidden ${
+        due ? 'border-yo-neon/30 shadow-[0_0_40px_rgba(214,255,52,0.05)]' : ''
       }`}
     >
-      <div className="flex items-center gap-3">
-        <div className="w-8 h-8 rounded-full bg-yo-black border border-yo-border flex items-center justify-center">
-          <Target size={16} className="text-yo-neon" />
+      {due && (
+        <div className="absolute top-0 right-0 w-32 h-32 bg-yo-neon/5 blur-3xl -mr-16 -mt-16" />
+      )}
+      
+      <div className="flex items-center gap-5">
+        <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center relative shadow-inner">
+          <Target size={24} className={due ? "text-yo-neon" : "text-yo-muted"} />
         </div>
         <div>
-          <p className="font-medium text-white text-sm">
-            {goal.amount} {(vault?.asset?.symbol || vault?.underlying?.symbol)} · {goal.period}
-          </p>
-          <p className="text-xs text-yo-muted">{goal.vaultId}</p>
+          <h4 className="text-lg font-bold text-white tracking-tight">
+            Save {goal.amount} <span className="text-sm text-yo-muted uppercase font-bold">{(vault?.asset?.symbol || vault?.underlying?.symbol)}</span>
+          </h4>
+          <p className="text-xs font-bold text-yo-muted uppercase tracking-[0.2em]">{goal.period} Plan · {goal.vaultId}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2">
+
+      <div className="flex items-center gap-4 w-full sm:w-auto">
         {due ? (
           <button
             onClick={handleExecute}
             disabled={isLoading || isSuccess}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-yo-neon text-black text-xs font-semibold hover:brightness-110 transition-all disabled:opacity-60"
+            className="flex-1 sm:flex-none h-12 px-6 rounded-xl bg-yo-neon text-black text-sm font-bold hover:brightness-110 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg"
           >
-            {isLoading ? <Loader2 size={12} className="animate-spin" /> : <TrendingUp size={12} />}
-            {isSuccess ? 'Done!' : 'Execute SIP'}
+            {isLoading ? <Loader2 size={16} className="animate-spin" /> : <Zap size={16} />}
+            {isSuccess ? 'Completed' : 'Execute SIP'}
           </button>
         ) : (
-          <span className="text-xs text-yo-muted px-2">On schedule</span>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/5 text-[10px] font-bold text-yo-muted uppercase tracking-widest">
+            <CheckCircle2 size={12} className="text-yo-muted2" />
+            On Schedule
+          </div>
         )}
-        <button onClick={onRemove} className="text-yo-muted2 hover:text-red-400 transition-colors text-xs px-1">
+        <button 
+          onClick={onRemove} 
+          className="w-12 h-12 flex items-center justify-center rounded-xl text-yo-muted2 hover:text-red-400 hover:bg-white/5 transition-all"
+        >
           ✕
         </button>
       </div>
