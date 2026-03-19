@@ -1,90 +1,92 @@
 # YoVest · Smart DeFi Savings on Base
 
-> **YoVest** (Yo + Invest) is a simple savings app on Base that helps you grow your money in high-yield vaults. From automatic savings plans to gifting yield and building streaks, YoVest makes DeFi savings easy and social for everyone.
+> **YoVest** (Yo + Invest) is a premium DeFi savings platform on Base that makes growing your crypto as simple as a traditional bank account. With automated SIPs, diversified portfolios, and social gifting, YoVest is the ultimate gateway to institutional-grade yield.
 
-**YoVest** is a consumer-focused savings and investment platform built on the [Yo Protocol](https://yoprotocol.com/). It makes earning interest on your crypto as easy as using a traditional savings account.
+Built on the [Yo Protocol](https://yoprotocol.com/).
 
-![YoVest Hero Banner](https://placehold.co/1200x400/05070A/ffffff?text=YoVest+Banner)
+![YoVest Hero Banner](https://placehold.co/1200x400/05070A/ffffff?text=YoVest+Professional+Savings)
 
-## ✨ Features
+## ✨ Core Features
 
 ### 1. Simple High-Yield Vaults
-Grow your crypto with curated vaults for **yoUSD** and **yoETH**.
-- **Real-time Interest**: Watch your balance grow every second.
-- **Easy Deposits**: One-click interactions to put your money to work.
+Direct access to curated yield-bearing vaults like **yoUSD** (USDC) and **yoETH** (WETH).
+- **Real-Time Growth**: Watch your interest accumulate per-block.
+- **Instant Deposits/Withdrawals**: No lockups, full liquidity.
 
-### 2. SIP (Savings Planner)
-Build a habit by setting up a recurring savings plan.
-- **Automatic Schedule**: Save Daily, Weekly, or Monthly.
-- **Synced Everywhere**: Your plans are securely saved and synced across all your devices.
+### 2. Portfolio Baskets (New!)
+Don't know which vault to pick? Invest in diversified bundles tailored to your risk profile.
+- **Conservative**: 90% yoUSD / 10% yoETH.
+- **Balanced**: 50/50 split for steady growth.
+- **Aggressive**: 90% yoETH / 10% yoUSD for maximum upside.
 
-### 3. Yo-Gift (Social Gifting)
-Send "Yield-Bearing" gifts directly to your friends' wallets.
-- **Personal Touch**: Attach a message and a digital card to your gift.
-- **Instant Value**: Your friend starts earning interest the second they receive the gift.
+### 3. Smart SIP (Recurring Savings)
+Automate your wealth building with sophisticated recurring plans.
+- **Dollar Cost Average**: Save Daily, Weekly, or Monthly.
+- **Automated Execution**: Set it and forget it.
 
-### 4. Savings Streaks
-Stay motivated with a Duolingo-style streak system.
-- **Keep it Burning**: Build your streak by saving consistently every week.
-- **Rewards**: Earn special badges as you hit major savings milestones.
+### 4. Yo-Gifts (Social Gifting)
+Send yield-bearing assets directly to a friend's wallet or Base Name.
+- **Celebratory Themes**: Choose from Classic, Gold, Nitro, or Love themes.
+- **Personalized Messages**: Attach a special note to your gift.
+- **Surprise Experience**: Recipients get a celebratory confetti popup on their dashboard!
 
-### 3. Integrated Dashboard
-A single source of truth for your financial health.
-- **Portfolio Tracking**: View total balance, active yield, and portfolio composition.
-- **Interactive Analytics**: Monitor historical trends and earnings growth.
+### 5. My Savings Dashboard
+Unified view of your financial health.
+- **Savings Milestones**: Set goals and track your progress visually.
+- **Gift Notifications**: Instantly see and claim gifts from friends.
+- **Portfolio Analytics**: Deep dive into your total balance and active yield.
 
 ## 🛠 Tech Stack
 
-- **Frontend**: React + Vite + TypeScript
-- **Styling**: Vanilla CSS + Framer Motion (Animations)
+- **Frontend**: React 18 + Vite + TypeScript + Framer Motion
 - **Web3**: Wagmi + RainbowKit + Viem
-- **Protocol**: Yo Protocol SDK & React Hooks
-- **Backend**: Vercel Serverless Functions
-- **Database**: MongoDB (Mongoose)
+- **Protocol**: [Yo Protocol SDK](https://github.com/yo-protocol/yo-protocol-sdk)
+- **Backend**: Vercel Serverless Functions + MongoDB (Mongoose)
+- **Routing**: React Router 6 (Optimized with Vercel SPA rewrites)
 
-## 📸 Demo Screenshots
+## 📸 Interface Preview
 
-| Dashboard | SIP Planner |
+| Vaults Page | My Savings |
 | :---: | :---: |
-| ![Dashboard Demo](https://placehold.co/400x300/05070A/ffffff?text=Dashboard+UI) | ![SIP Demo](https://placehold.co/400x300/05070A/ffffff?text=SIP+Planner+UI) |
+| ![Vaults UI](https://placehold.co/500x350/05070A/ffffff?text=Vaults+Marketplace+UI) | ![Dashboard UI](https://placehold.co/500x350/05070A/ffffff?text=Savings+Dashboard+UI) |
+
+| Portfolio Baskets | Yo-Gifts |
+| :---: | :---: |
+| ![Baskets UI](https://placehold.co/500x350/05070A/ffffff?text=Portfolio+Baskets+UI) | ![Gifts UI](https://placehold.co/500x350/05070A/ffffff?text=Social+Gifting+UI) |
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 - Node.js 18+
-- a MongoDB Cluster
-- Vercel CLI (optional for local API testing)
+- MongoDB Instance (Atlas or Local)
+- Base Mainnet Wallet (Metamask, Coinbase Wallet, etc.)
 
-### Installation
+### Setup
 
-1. **Clone the repository**
+1. **Clone & Install**
    ```bash
    git clone https://github.com/akshaydhayal/YoVest-Savings.git
    cd YoVest-Savings
-   ```
-
-2. **Install dependencies**
-   ```bash
    npm install
    ```
 
-3. **Configure Environment Variables**
-   Create a `.env` file in the root:
+2. **Environment Configuration**
+   Create a `.env` in the root:
    ```env
-   MONGODB_URI=your_mongodb_connection_string
+   MONGODB_URI=your_mongodb_uri
    ```
 
-4. **Run Locally**
+3. **Development**
    ```bash
    npm run dev
    ```
 
-## 🌐 Deployment
+## 🌐 Deployment & Configuration
 
-The project is optimized for **Vercel**.
-- The `api/` folder contains serverless functions for the SIP database.
-- **Note**: Ensure you add `MONGODB_URI` to your Vercel Environment Variables.
+Deployed on **Vercel** for optimal performance.
+- Uses `vercel.json` rewrites to support direct navigation/refreshes in SPA mode.
+- Serverless API routes handle Gift and SIP metadata persistence.
 
 ---
 
-Built for the **Base** Ecosystem.
+Built with ❤️ for the **Base** Ecosystem.

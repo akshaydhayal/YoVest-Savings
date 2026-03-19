@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion'
 import confetti from 'canvas-confetti'
 import MilestoneModal from '../components/MilestoneModal'
 import YieldCalculator from '../components/YieldCalculator'
+import DepositModal from '../components/DepositModal'
 import { Link } from 'react-router-dom'
 import { useAccount, useChainId } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { useUserPositions, usePrices } from '@yo-protocol/react'
+import { useUserPositions, usePrices, useYoClient } from '@yo-protocol/react'
 import { VAULTS } from '@yo-protocol/core'
-import { ArrowUpRight, TrendingUp, Zap, BarChart3, Wallet, PieChart, Activity, Target } from 'lucide-react'
+import { ArrowUpRight, TrendingUp, Zap, BarChart3, Wallet, PieChart, Activity, Target, Calculator, Download, X } from 'lucide-react'
 import { formatUnits } from 'viem'
 
 const F    = "'Outfit', system-ui, sans-serif"
@@ -157,6 +158,11 @@ export default function DashboardPage() {
   
   // Gift Surprise State
   const [activeGift, setActiveGift] = useState<any>(null)
+  const [showCalculator, setShowCalculator] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
+  const [activeDepositVault, setActiveDepositVault] = useState<any>(null)
+  const [modalAction, setModalAction] = useState<'deposit' | 'withdraw'>('deposit')
+  const client = useYoClient()
 
   // Enriched list INCLUDING vaults with milestones but no position
   const enrichedWithGoals = useMemo(() => {
@@ -225,6 +231,55 @@ export default function DashboardPage() {
     }
   }
 
+  const handleExportHistory = async () => {
+    if (!address || !client || enriched.length === 0) return
+    setIsExporting(true)
+    try {
+      let csv = 'Date,Vault,Asset,Type,Amount,Shares,Network,TxHash,ExplorerLink\n'
+      
+      const historyPromises = enriched.map(async (p) => {
+        try {
+          const history = await client.getUserHistory(p.vaultAddr as any, address)
+          return history.map(tx => ({ 
+            ...tx, 
+            vaultName: p.name,
+            assetSymbol: p.symbol,
+            explorerBase: 'https://basescan.org/tx/'
+          }))
+        } catch (e) {
+          console.error(`Failed to fetch history for ${p.name}:`, e)
+          return []
+        }
+      })
+      
+      const allResults = await Promise.all(historyPromises)
+      const flatHistory = allResults.flat().sort((a, b) => (b.blockTimestamp || 0) - (a.blockTimestamp || 0))
+      
+      flatHistory.forEach((tx: any) => {
+        const date = tx.blockTimestamp ? new Date(tx.blockTimestamp * 1000).toLocaleString() : 'N/A'
+        const amount = tx.assets?.formatted || '0'
+        const shares = tx.shares?.formatted || '0'
+        const explorerLink = tx.transactionHash ? `${tx.explorerBase}${tx.transactionHash}` : ''
+        
+        csv += `"${date}","${tx.vaultName}","${tx.assetSymbol}","${tx.type}","${amount}","${shares}","${tx.network || 'base'}","${tx.transactionHash || 'N/A'}","${explorerLink}"\n`
+      })
+
+      const blob = new Blob([csv], { type: 'text/csv' })
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.setAttribute('hidden', '')
+      a.setAttribute('href', url)
+      a.setAttribute('download', `yovest_detailed_history_${address.slice(0, 6)}.csv`)
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    } catch (e) {
+      console.error('Export failed:', e)
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
   useEffect(() => {
     fetchMilestones()
     fetchGifts()
@@ -275,8 +330,18 @@ export default function DashboardPage() {
           <h1 style={{ fontFamily: F, fontSize: 26, fontWeight: 700, color: '#fff', letterSpacing: '-0.022em', margin: 0 }}>Financial Overview</h1>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
-          <button style={{ height: 38, padding: '0 16px', borderRadius: 11, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', fontFamily: F, fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer' }}>
-            Export History
+          <button 
+            onClick={() => setShowCalculator(true)}
+            style={{ height: 38, padding: '0 16px', borderRadius: 11, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', fontFamily: F, fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', letterSpacing: '0.1em', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+          >
+            <Calculator size={13} /> Yield Calculator
+          </button>
+          <button 
+            onClick={handleExportHistory}
+            disabled={isExporting}
+            style={{ height: 38, padding: '0 16px', borderRadius: 11, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', fontFamily: F, fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.9)', textTransform: 'uppercase', letterSpacing: '0.1em', cursor: isExporting ? 'not-allowed' : 'pointer', opacity: isExporting ? 0.6 : 1, display: 'flex', alignItems: 'center', gap: 6 }}
+          >
+            <Download size={13} /> {isExporting ? 'Preparing…' : 'Export History'}
           </button>
           <Link to="/sip" style={{ height: 38, padding: '0 16px', borderRadius: 11, background: '#d6ff34', color: '#05070A', fontFamily: F, fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
             <Zap size={13} />New Savings Plan
@@ -415,10 +480,29 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* ── Yield Calculator ── */}
-      <div style={{ marginBottom: 20 }}>
-        <YieldCalculator avgApy={enriched.length > 0 ? (enriched.reduce((s: number, p: any) => s + p.yield30d, 0) / enriched.length) : 10.5} />
-      </div>
+      {/* Calculator Modal */}
+      <AnimatePresence>
+        {showCalculator && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            style={{ position: 'fixed', inset: 0, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, background: 'rgba(5,7,10,0.85)', backdropFilter: 'blur(12px)' }}
+            onClick={(e) => { if (e.target === e.currentTarget) setShowCalculator(false) }}
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
+              style={{ width: '100%', maxWidth: 800, position: 'relative' }}
+            >
+              <button 
+                onClick={() => setShowCalculator(false)}
+                style={{ position: 'absolute', top: 12, right: 12, width: 32, height: 32, borderRadius: 10, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', cursor: 'pointer', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <X size={16} />
+              </button>
+              <YieldCalculator avgApy={enriched.length > 0 ? (enriched.reduce((s: number, p: any) => s + p.yield30d, 0) / enriched.length) : 10.5} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* ── Positions Table ── */}
       <div>
@@ -468,15 +552,15 @@ export default function DashboardPage() {
           ) : (
             <div>
               {/* Column headers */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1.8fr 1fr 1fr 1fr 0.8fr 120px', padding: '10px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)', gap: 8 }}>
-                {['Vault', 'Token Balance', 'USD Value', 'Price', 'APY', 'Goal / Status'].map(h => (
+              <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 0.8fr 0.8fr 150px 120px', padding: '10px 20px', borderBottom: '1px solid rgba(255,255,255,0.05)', gap: 8 }}>
+                {['Vault', 'Token Balance', 'USD Value', 'Price', 'APY', 'Actions', 'Goal / Status'].map(h => (
                   <span key={h} style={LABEL}>{h}</span>
                 ))}
               </div>
               {enrichedWithGoals.map((p: any, i: number) => (
                 <motion.div key={i}
                   initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 + i * 0.08 }}
-                  style={{ display: 'grid', gridTemplateColumns: '1.8fr 1fr 1fr 1fr 0.8fr 120px', padding: '16px 20px', alignItems: 'center', borderBottom: i === enriched.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.04)', gap: 8, transition: 'background 0.18s', cursor: 'default' }}
+                  style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 0.8fr 0.8fr 150px 120px', padding: '16px 20px', alignItems: 'center', borderBottom: i === enriched.length - 1 ? 'none' : '1px solid rgba(255,255,255,0.04)', gap: 8, transition: 'background 0.18s', cursor: 'default' }}
                   onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = 'rgba(255,255,255,0.02)'}
                   onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = 'transparent'}
                 >
@@ -514,6 +598,21 @@ export default function DashboardPage() {
                       {p.yield30d ? `${p.yield30d.toFixed(2)}%` : '—'}
                     </p>
                     <p style={{ fontFamily: F, fontSize: 9, color: 'rgba(148,163,184,0.5)', margin: '2px 0 0', textTransform: 'uppercase' }}>30D Avg</p>
+                  </div>
+                  {/* Actions */}
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <button 
+                      onClick={() => { setActiveDepositVault(p); setModalAction('deposit') }}
+                      style={{ flex: 1, height: 28, borderRadius: 8, background: `${p.accent}12`, border: `1px solid ${p.accent}25`, color: p.accent, fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}
+                    >
+                      <Zap size={10} /> Deposit
+                    </button>
+                    <button 
+                      onClick={() => { setActiveDepositVault(p); setModalAction('withdraw') }}
+                      style={{ flex: 1, height: 28, borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#fff', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}
+                    >
+                      <ArrowUpRight size={10} /> Withdraw
+                    </button>
                   </div>
                   {/* Status / Goal */}
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6, width: '100%' }}>
@@ -585,6 +684,20 @@ export default function DashboardPage() {
           initialAmount={editableMilestone.targetAmount.toString()}
           onClose={() => setEditableMilestone(null)}
           onSuccess={fetchMilestones}
+        />
+      )}
+
+      {activeDepositVault && (
+        <DepositModal
+          vaultId={activeDepositVault.vaultId}
+          vault={{
+            name: activeDepositVault.name,
+            address: activeDepositVault.vaultAddr,
+            asset: { symbol: activeDepositVault.symbol, decimals: activeDepositVault.decimals }
+          }}
+          accentColor={activeDepositVault.accent}
+          initialAction={modalAction}
+          onClose={() => setActiveDepositVault(null)}
         />
       )}
 

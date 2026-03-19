@@ -10,14 +10,15 @@ const F    = "'Outfit', system-ui, sans-serif"
 const FNUM = "'DM Mono', 'Fira Code', monospace"
 
 export default function DepositModal({
-  vaultId, vault, accentColor, onClose,
+  vaultId, vault, accentColor, onClose, initialAction = 'deposit',
 }: {
   vaultId: string
   vault: any
   accentColor: string
   onClose: () => void
+  initialAction?: 'deposit' | 'withdraw'
 }) {
-  const [action, setAction] = useState<'deposit' | 'withdraw'>('deposit')
+  const [action, setAction] = useState<'deposit' | 'withdraw'>(initialAction)
   const [amount, setAmount] = useState('')
   const { address }         = useAccount()
   const chainId             = useChainId()
