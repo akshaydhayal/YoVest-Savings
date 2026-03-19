@@ -4,8 +4,6 @@
 
 Built on the [Yo Protocol](https://yoprotocol.com/).
 
-![YoVest Hero Banner](https://placehold.co/1200x400/05070A/ffffff?text=YoVest+Professional+Savings)
-
 ## ✨ Core Features
 
 ### 1. Simple High-Yield Vaults
@@ -46,17 +44,23 @@ Unified view of your financial health.
 
 ## 📸 Interface Preview
 
-| Vaults Page | My Savings |
-| :---: | :---: |
-| ![Vaults UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/vaults.png) | ![Dashboard UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/dashboard.png) |
+### Vaults Marketplace
+![Vaults UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/vaults.png)
+
+### Savings Dashboard (Command Center)
+![Dashboard UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/dashboard.png)
 
 | Portfolio Baskets | Smart SIP |
 | :---: | :---: |
 | ![Baskets UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/baskets.png) | ![Smart SIP UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/sip.png) |
 
-| Yo-Gifts | Gift Look |
+| Yo-Gifts | Yield Calculator |
 | :---: | :---: |
-| ![Baskets UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/gifts.png) | ![Gifts UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/gifts_card.png) |
+| ![Gifts UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/gifts.png) | ![Gifts UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/calc.png) |
+
+| Gifts Sending | Gift Surprise |
+| :---: | :---: |
+| ![Gifts UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/gift1.png) | ![Gifts UI](https://github.com/akshaydhayal/YoVest-Savings/blob/main/src/assets/gifts_card.png) |
 
 ## 🚀 Getting Started
 
