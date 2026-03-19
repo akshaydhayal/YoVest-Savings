@@ -34,7 +34,7 @@ const CARD: React.CSSProperties = {
 }
 const LABEL: React.CSSProperties = {
   fontSize: 9, fontWeight: 600,
-  color: 'rgba(148,163,184,0.65)',
+  color: 'rgba(255,255,255,0.7)',
   textTransform: 'uppercase', letterSpacing: '0.2em',
 }
 

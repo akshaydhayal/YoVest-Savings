@@ -219,15 +219,15 @@ export default function SIPPage() {
     <div style={{ minHeight:'100vh', background:'#05070A', fontFamily:F_SANS, position:'relative', overflowX:'hidden' }}>
       <SceneBg />
 
-      <div style={{ maxWidth:660, margin:'0 auto', padding:'24px 24px 48px', position:'relative', zIndex:1 }}>
+      <div style={{ maxWidth:660, margin:'0 auto', padding:'2px 24px 4px', position:'relative', zIndex:1 }}>
 
         {/* Header */}
         <motion.div
           initial={{ opacity:0, y:-14 }} animate={{ opacity:1, y:0 }}
           transition={{ duration:0.55, ease:[0.16,1,0.3,1] }}
-          style={{ textAlign:'center', marginBottom:28 }}
+          style={{ textAlign:'center', marginBottom:12 }}
         >
-          <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'5px 14px', borderRadius:100, background:'rgba(214,255,52,0.08)', border:'1px solid rgba(214,255,52,0.2)', marginBottom:18 }}>
+          <div style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'5px 14px', borderRadius:100, background:'rgba(214,255,52,0.08)', border:'1px solid rgba(214,255,52,0.2)', marginBottom:4 }}>
             <div style={{ width:6, height:6, borderRadius:'50%', background:'#d6ff34', boxShadow:'0 0 6px rgba(214,255,52,0.9)' }} />
             <span style={{ fontSize:10, fontWeight:600, color:'#d6ff34', letterSpacing:'0.2em', textTransform:'uppercase' }}>
               Automated Savings

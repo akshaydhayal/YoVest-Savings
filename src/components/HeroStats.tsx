@@ -1,20 +1,73 @@
-import { useVaults, useTotalTvl } from '@yo-protocol/react'
+import { useVaults, useTotalTvl, usePrices } from '@yo-protocol/react'
 import { motion } from 'framer-motion'
 import { Globe, Zap, BarChart3 } from 'lucide-react'
+import { useReadContracts } from 'wagmi'
+import { formatUnits } from 'viem'
 
 const F    = "'Outfit', system-ui, sans-serif"
 const FNUM = "'DM Mono', 'Fira Code', monospace"
 
+const SYMBOL_TO_CG: Record<string, string> = {
+  'WETH': 'ethereum', 'ETH': 'ethereum', 'yoETH': 'ethereum',
+  'cbBTC': 'bitcoin', 'BTC': 'bitcoin', 'yoBTC': 'bitcoin',
+  'USDC': 'usd-coin', 'USDT': 'tether', 'yoUSD': 'usd-coin',
+  'EURC': 'euro-coin', 'EUR': 'euro-coin', 'yoEUR': 'euro-coin',
+  'XAUt': 'tether-gold', 'GOLD': 'tether-gold', 'yoGOLD': 'tether-gold',
+}
+
+const VAULT_ABI = [
+  { name: 'totalAssets', type: 'function', stateMutability: 'view', inputs: [], outputs: [{ type: 'uint256' }] }
+] as const
+
 export default function HeroStats() {
   const { vaults } = useVaults()
-  const { tvl }    = useTotalTvl()
+  const { tvl, isLoading: isTvlLoading } = useTotalTvl()
+  const { prices } = usePrices()
+
+  // ── Robust On-chain TVL Fallback ──
+  const activeVaults = vaults?.filter(v => (v.contracts?.vaultAddress || (v as any).address)) || []
+  const { data: contractResults } = useReadContracts({
+    contracts: activeVaults.map(v => ({
+      address: (v.contracts?.vaultAddress || (v as any).address) as `0x${string}`,
+      abi: VAULT_ABI,
+      functionName: 'totalAssets',
+    }))
+  })
+
+  const manualTvlSum = activeVaults.reduce((sum, vault, i) => {
+    const assets = contractResults?.[i]?.result as bigint | undefined
+    if (!assets || !prices) return sum
+    
+    const rawSymbol = (vault as any).underlying?.symbol || (vault as any).asset?.symbol || ''
+    if (rawSymbol.toLowerCase().includes('gold')) return sum // Skip gold per user request
+    
+    // Normalize symbol (remove 'yo' prefix if present)
+    const normalizedSymbol = rawSymbol.replace(/^yo/, '')
+    const cgId = SYMBOL_TO_CG[rawSymbol] ?? SYMBOL_TO_CG[normalizedSymbol] ?? normalizedSymbol.toLowerCase()
+    
+    const price = (prices as any)?.[cgId] ?? 0
+    const decimals = (vault as any).underlying?.decimals || (vault as any).asset?.decimals || 18
+    const amount = Number(formatUnits(assets, decimals))
+    
+    return sum + (amount * price)
+  }, 0)
 
   const currentTvlPoint = tvl?.[tvl.length - 1] as any
-  const totalTvl = currentTvlPoint?.tvl
-    ? `$${Number(currentTvlPoint.tvl).toLocaleString()}`
-    : currentTvlPoint?.value
-    ? `$${Number(currentTvlPoint.value).toLocaleString()}`
-    : '—'
+  const vaultsTvlSumFromIndexer = vaults?.reduce((acc, v: any) => acc + (Number(v.tvl) || 0), 0) ?? 0
+
+  const totalTvl = isTvlLoading 
+    ? 'Loading…'
+    : currentTvlPoint?.tvl
+      ? `$${Number(currentTvlPoint.tvl).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+      : currentTvlPoint?.value
+        ? `$${Number(currentTvlPoint.value).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+        : (tvl as any)?.totalTvl 
+          ? `$${Number((tvl as any).totalTvl).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+          : manualTvlSum > 0
+            ? `$${Number(manualTvlSum).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+            : vaultsTvlSumFromIndexer > 0
+              ? `$${Number(vaultsTvlSumFromIndexer).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
+              : '—'
 
   const items = [
     { label: 'Total Value Locked', value: totalTvl,                        icon: BarChart3, accent: '#d6ff34',  isNum: true },
@@ -23,7 +76,7 @@ export default function HeroStats() {
   ]
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 48 }}
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 32 }}
       className="hero-stats-grid">
       {items.map(({ label, value, icon: Icon, accent, isNum }, i) => (
         <motion.div
@@ -34,8 +87,8 @@ export default function HeroStats() {
           style={{
             background: 'rgba(13,17,23,0.7)',
             border: '1px solid rgba(255,255,255,0.06)',
-            borderRadius: 18,
-            padding: '18px 20px',
+            borderRadius: 16,
+            padding: '12px 16px',
             position: 'relative', overflow: 'hidden',
             backdropFilter: 'blur(12px)',
             fontFamily: F,
@@ -47,23 +100,24 @@ export default function HeroStats() {
           {/* corner glow */}
           <div aria-hidden style={{ position: 'absolute', top: -20, right: -20, width: 80, height: 80, borderRadius: '50%', background: `radial-gradient(circle, ${accent}18 0%, transparent 70%)`, pointerEvents: 'none' }} />
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-            <div style={{ width: 28, height: 28, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-              <Icon size={13} color={accent} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{ width: 24, height: 24, borderRadius: 7, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+              <Icon size={12} color={accent} />
             </div>
-            <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(148,163,184,0.5)', textTransform: 'uppercase', letterSpacing: '0.22em' }}>
-              {label}
-            </span>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, overflow: 'hidden' }}>
+              <span style={{ fontSize: 9, fontWeight: 600, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.15em', whiteSpace: 'nowrap' }}>
+                {label}
+              </span>
+              <p style={{
+                fontFamily: isNum ? FNUM : F,
+                fontSize: 14, fontWeight: isNum ? 500 : 700,
+                color: '#fff', letterSpacing: isNum ? '-0.01em' : '-0.01em',
+                margin: 0, whiteSpace: 'nowrap'
+              }}>
+                {value}
+              </p>
+            </div>
           </div>
-
-          <p style={{
-            fontFamily: isNum ? FNUM : F,
-            fontSize: 20, fontWeight: isNum ? 500 : 600,
-            color: '#fff', letterSpacing: isNum ? '-0.02em' : '-0.01em',
-            margin: 0,
-          }}>
-            {value}
-          </p>
         </motion.div>
       ))}
 

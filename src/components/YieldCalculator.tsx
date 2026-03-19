@@ -51,7 +51,7 @@ export default function YieldCalculator({ avgApy = 10.5 }: { avgApy?: number }) 
         </div>
         <div>
           <h2 style={{ fontSize: 18, fontWeight: 700, color: '#fff', margin: '0 0 2px', letterSpacing: '-0.01em' }}>Yield Projection</h2>
-          <p style={{ fontSize: 11, color: 'rgba(148,163,184,0.6)', textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0, fontWeight: 600 }}>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0, fontWeight: 600 }}>
             Compound Interest Simulator
           </p>
         </div>
@@ -89,7 +89,7 @@ export default function YieldCalculator({ avgApy = 10.5 }: { avgApy?: number }) 
           </div>
 
           <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: 16, padding: '16px' }}>
-            <p style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.5)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px' }}>Projected Yield</p>
+            <p style={{ fontSize: 10, fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.1em', margin: '0 0 4px' }}>Projected Yield</p>
             <p style={{ fontFamily: FNUM, fontSize: 28, fontWeight: 600, color: '#10b981', margin: 0, letterSpacing: '-0.02em' }}>+${profit.toLocaleString()}</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8 }}>
               <TrendingUp size={12} color="#d6ff34" />
@@ -112,8 +112,8 @@ export default function YieldCalculator({ avgApy = 10.5 }: { avgApy?: number }) 
                   <stop offset="95%" stopColor="#4E6FFF" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'rgba(148,163,184,0.5)' }} dy={10} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'rgba(148,163,184,0.5)' }} tickFormatter={(val) => `$${val >= 1000 ? (val/1000).toFixed(0) + 'k' : val}`} />
+              <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.7)' }} dy={10} />
+              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: 'rgba(255,255,255,0.7)' }} tickFormatter={(val) => `$${val >= 1000 ? (val/1000).toFixed(0) + 'k' : val}`} />
               <CartesianGrid vertical={false} stroke="rgba(255,255,255,0.05)" />
               <Tooltip 
                 contentStyle={{ background: 'rgba(13,17,23,0.9)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 12, fontSize: 12 }}

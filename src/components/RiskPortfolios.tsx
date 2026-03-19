@@ -199,7 +199,7 @@ function BundleModal({ profile, onClose }: { profile: any; onClose: () => void }
           {step === 0 && (
             <>
               <div style={{ marginBottom: 20 }}>
-                <label style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.6)', textTransform: 'uppercase', letterSpacing: '0.15em', display: 'block', marginBottom: 8 }}>Total Investment (USD)</label>
+                <label style={{ fontSize: 10, fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.15em', display: 'block', marginBottom: 8 }}>Total Investment (USD)</label>
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
@@ -214,7 +214,7 @@ function BundleModal({ profile, onClose }: { profile: any; onClose: () => void }
 
               <div style={{ marginBottom: 24 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-                  <p style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.6)', textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0 }}>Allocation Split</p>
+                  <p style={{ fontSize: 10, fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0 }}>Allocation Split</p>
                   {profile.allocations.length > 1 && (
                     <button onClick={() => setIsEditing(!isEditing)} style={{ background: 'transparent', border: 'none', color: profile.color, fontSize: 10, fontWeight: 700, cursor: 'pointer', textTransform: 'uppercase' }}>
                       {isEditing ? 'Done' : 'Customize'}
