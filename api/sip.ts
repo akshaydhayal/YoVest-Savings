@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import dbConnect from './lib/mongodb'
-import Goal from './models/Goal'
+import dbConnect from './lib/mongodb.js'
+import Goal from './models/Goal.js'
 
 export default async function handler(
   request: VercelRequest,
@@ -8,7 +8,17 @@ export default async function handler(
 ) {
   const { method } = request
 
-  await dbConnect()
+  try {
+    await dbConnect()
+  } catch (error: any) {
+    console.error('Database connection failed:', error)
+    return response.status(500).json({ 
+      success: false, 
+      error: 'Database connection failed', 
+      details: error.message,
+      hint: 'Check if MONGODB_URI is set in Vercel environment variables and IP Whitelist is configured.'
+    })
+  }
 
   switch (method) {
     case 'GET':
