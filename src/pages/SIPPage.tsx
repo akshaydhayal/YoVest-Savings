@@ -382,7 +382,7 @@ export default function SIPPage() {
                 />
               </div>
               <div>
-                <FL>Target Amount</FL>
+                <FL>Target Amount (USD)</FL>
                 <input
                   type="number"
                   placeholder="5000"

@@ -146,6 +146,7 @@ export default function DashboardPage() {
 
   const [milestones, setMilestones] = useState<any[]>([])
   const [activeMilestoneVault, setActiveMilestoneVault] = useState<any>(null)
+  const [editableMilestone, setEditableMilestone] = useState<any>(null)
 
   // Enriched list INCLUDING vaults with milestones but no position
   const enrichedWithGoals = useMemo(() => {
@@ -486,18 +487,28 @@ export default function DashboardPage() {
                     {(() => {
                       const ms = milestones.find(m => m.vaultId === p.vaultId)
                       if (ms) {
-                        const progress = Math.min((p.tokenNum / ms.targetAmount) * 100, 100)
+                        const progress = Math.min((p.usdValue / ms.targetAmount) * 100, 100)
                         return (
                           <div style={{ width: '100%', textAlign: 'right' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
-                              <span style={{ fontSize: 9, color: 'rgba(148,163,184,0.6)', fontWeight: 600, letterSpacing: '0.1em' }}>{ms.name.toUpperCase()}</span>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                                <span style={{ fontSize: 9, color: 'rgba(148,163,184,0.6)', fontWeight: 600, letterSpacing: '0.1em' }}>{ms.name.toUpperCase()}</span>
+                                <button 
+                                  onClick={() => setEditableMilestone({ ...ms, vault: p })}
+                                  style={{ background: 'transparent', border: 'none', padding: 0, cursor: 'pointer', display: 'flex', alignItems: 'center', opacity: 0.6 }}
+                                  onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+                                  onMouseLeave={e => e.currentTarget.style.opacity = '0.6'}
+                                >
+                                  <Activity size={8} color="#d6ff34" />
+                                </button>
+                              </div>
                               <span style={{ fontSize: 9, color: progress >= 100 ? '#10b981' : '#fff', fontWeight: 600 }}>{Math.floor(progress)}%</span>
                             </div>
                             <div style={{ width: '100%', height: 5, background: 'rgba(255,255,255,0.06)', borderRadius: 3, overflow: 'hidden' }}>
                               <div style={{ height: '100%', background: progress >= 100 ? '#10b981' : p.accent, width: `${progress}%`, transition: 'width 0.5s ease-out' }} />
                             </div>
                             <div style={{ fontSize: 8, color: 'rgba(148,163,184,0.5)', marginTop: 4, letterSpacing: '0.02em', fontFamily: FNUM }}>
-                              {parseFloat(p.tokenAmount).toPrecision(4)} / {ms.targetAmount}
+                              ${p.usdValue.toFixed(2)} / ${ms.targetAmount.toLocaleString()}
                             </div>
                           </div>
                         )
@@ -525,9 +536,21 @@ export default function DashboardPage() {
       {activeMilestoneVault && (
         <MilestoneModal
           vaultId={activeMilestoneVault.vaultId}
-          vault={{ name: activeMilestoneVault.name, asset: { symbol: activeMilestoneVault.symbol } }}
+          vault={{ name: activeMilestoneVault.name || activeMilestoneVault.vaultId, asset: { symbol: activeMilestoneVault.symbol } }}
           accentColor={activeMilestoneVault.accent}
           onClose={() => setActiveMilestoneVault(null)}
+          onSuccess={fetchMilestones}
+        />
+      )}
+
+      {editableMilestone && (
+        <MilestoneModal
+          vaultId={editableMilestone.vaultId}
+          vault={{ name: editableMilestone.vault.name || editableMilestone.vaultId, asset: { symbol: editableMilestone.vault.symbol } }}
+          accentColor={editableMilestone.vault.accent}
+          initialName={editableMilestone.name}
+          initialAmount={editableMilestone.targetAmount.toString()}
+          onClose={() => setEditableMilestone(null)}
           onSuccess={fetchMilestones}
         />
       )}

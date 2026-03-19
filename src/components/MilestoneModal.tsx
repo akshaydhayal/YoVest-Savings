@@ -7,16 +7,18 @@ const F    = "'Outfit', system-ui, sans-serif"
 const FNUM = "'DM Mono', 'Fira Code', monospace"
 
 export default function MilestoneModal({
-  vaultId, vault, accentColor, onClose, onSuccess
+  vaultId, vault, accentColor, onClose, onSuccess, initialName = '', initialAmount = ''
 }: {
   vaultId: string
   vault: any
   accentColor: string
   onClose: () => void
   onSuccess: () => void
+  initialName?: string
+  initialAmount?: string
 }) {
-  const [goalName, setGoalName] = useState('')
-  const [targetAmount, setTargetAmount] = useState('')
+  const [goalName, setGoalName] = useState(initialName)
+  const [targetAmount, setTargetAmount] = useState(initialAmount)
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -82,7 +84,7 @@ export default function MilestoneModal({
               </div>
               <div>
                 <h2 style={{ fontFamily: F, fontSize: 16, fontWeight: 600, color: '#fff', letterSpacing: '-0.01em', margin: '0 0 2px' }}>
-                  Set Savings Goal
+                  {initialName ? 'Edit Savings Goal' : 'Set Savings Goal'}
                 </h2>
                 <p style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.45)', textTransform: 'uppercase', letterSpacing: '0.15em', margin: 0 }}>
                   {vault.name ?? vaultId} · {assetSymbol}
@@ -127,7 +129,7 @@ export default function MilestoneModal({
 
                 <div>
                   <label style={{ fontSize: 10, fontWeight: 600, color: 'rgba(148,163,184,0.45)', textTransform: 'uppercase', letterSpacing: '0.2em', marginBottom: 9, display: 'block' }}>
-                    Target Amount
+                    Target Amount (USD)
                   </label>
                   <div style={{ position: 'relative' }}>
                     <input
@@ -148,9 +150,9 @@ export default function MilestoneModal({
                       onBlur={e =>  { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)'; e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
                     />
                     <div style={{ position: 'absolute', right: 13, top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: 9, padding: '5px 11px' }}>
-                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: accentColor, flexShrink: 0 }} />
+                      <div style={{ width: 7, height: 7, borderRadius: '50%', background: '#00FF8B', flexShrink: 0 }} />
                       <span style={{ fontFamily: FNUM, fontSize: 11, fontWeight: 500, color: 'rgba(255,255,255,0.75)', letterSpacing: '0.04em' }}>
-                        {assetSymbol}
+                        USD
                       </span>
                     </div>
                   </div>
@@ -165,30 +167,30 @@ export default function MilestoneModal({
                   </div>
                 )}
 
-                <motion.button
-                  onClick={handleSave}
-                  disabled={!isValid || !goalName || isLoading}
-                  whileTap={{ scale: 0.975 }}
-                  style={{
-                    width: '100%', height: 52, borderRadius: 14, border: 'none',
-                    cursor: (isLoading || !isValid || !goalName) ? 'not-allowed' : 'pointer',
-                    background: accentColor, 
-                    color: '#05070A',
-                    fontFamily: F, fontSize: 13, fontWeight: 700,
-                    letterSpacing: '0.1em', textTransform: 'uppercase',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
-                    transition: 'box-shadow 0.25s, opacity 0.2s',
-                    boxShadow: `0 0 24px ${accentColor}25`,
-                    opacity: (!isValid) ? 0.38 : 1,
-                    marginTop: 2,
-                  }}
-                  onMouseEnter={e => { if (!isLoading && isValid) (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 40px ${accentColor}50` }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 24px ${accentColor}25` }}
-                >
-                  {isLoading && <Loader2 size={16} className="animate-spin" />}
-                  <span>Set Goal</span>
-                  {!isLoading && <ArrowRight size={15} />}
-                </motion.button>
+                  <motion.button
+                    onClick={handleSave}
+                    disabled={!isValid || !goalName || isLoading}
+                    whileTap={{ scale: 0.975 }}
+                    style={{
+                      width: '100%', height: 52, borderRadius: 14, border: 'none',
+                      cursor: (isLoading || !isValid || !goalName) ? 'not-allowed' : 'pointer',
+                      background: accentColor, 
+                      color: '#05070A',
+                      fontFamily: F, fontSize: 13, fontWeight: 700,
+                      letterSpacing: '0.1em', textTransform: 'uppercase',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
+                      transition: 'box-shadow 0.25s, opacity 0.2s',
+                      boxShadow: `0 0 24px ${accentColor}25`,
+                      opacity: (!isValid) ? 0.38 : 1,
+                      marginTop: 2,
+                    }}
+                    onMouseEnter={e => { if (!isLoading && isValid) (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 40px ${accentColor}50` }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.boxShadow = `0 0 24px ${accentColor}25` }}
+                  >
+                    {isLoading && <Loader2 size={16} className="animate-spin" />}
+                    <span>{initialName ? 'Update Goal' : 'Set Goal'}</span>
+                    {!isLoading && <ArrowRight size={15} />}
+                  </motion.button>
               </>
             ) : (
               <motion.div
